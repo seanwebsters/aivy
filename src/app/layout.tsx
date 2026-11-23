@@ -13,6 +13,8 @@ export const metadata: Metadata = {
     description: "Discover exactly how AI could save your business time, reduce costs and unlock new opportunities.",
     images: ["/aivy/hero-bg.webp"],
   },
+  // Preview deployments stay out of search engines.
+  ...(process.env.AIVY_NOINDEX === "true" ? { robots: { index: false, follow: false } } : {}),
 };
 
 export const viewport: Viewport = { themeColor: "#150d33" };

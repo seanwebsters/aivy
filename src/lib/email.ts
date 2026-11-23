@@ -20,7 +20,7 @@ export async function sendEmail(to: string, subject: string, html: string) {
 }
 
 export async function sendPurchaseEmail(to: string, a: Analysis) {
-  const url = `${(process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000").replace(/\/$/, "")}/dashboard/${a.id}`;
+  const url = `${(process.env.NEXT_PUBLIC_APP_URL ?? (process.env.RAILWAY_PUBLIC_DOMAIN ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}` : "http://localhost:3000")).replace(/\/$/, "")}/dashboard/${a.id}`;
   const name = a.profile?.name ?? a.domain;
   await sendEmail(
     to,

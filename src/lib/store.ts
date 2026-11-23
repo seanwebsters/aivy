@@ -28,7 +28,7 @@ interface Db {
 const empty = (): Db => ({ analyses: {}, entitlements: {}, sessions: {}, processedStripeEvents: [], events: [], spend: {}, visits: {} });
 
 const g = globalThis as unknown as { __aivyDb?: Db; __aivyWrite?: Promise<void>; __aivyLoad?: Promise<Db> };
-const DIR = process.env.AIVY_DATA_DIR ?? path.join(process.cwd(), ".data");
+const DIR = process.env.AIVY_DATA_DIR ?? process.env.RAILWAY_VOLUME_MOUNT_PATH ?? path.join(process.cwd(), ".data");
 const FILE = path.join(DIR, "db.json");
 
 async function load(): Promise<Db> {

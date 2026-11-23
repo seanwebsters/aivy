@@ -22,7 +22,7 @@ export function simulatedPaymentsAllowed() {
 }
 
 export function appUrl() {
-  return (process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000").replace(/\/$/, "");
+  return (process.env.NEXT_PUBLIC_APP_URL ?? (process.env.RAILWAY_PUBLIC_DOMAIN ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}` : "http://localhost:3000")).replace(/\/$/, "");
 }
 
 export async function createCheckout(analysisId: string, ownerKey: string): Promise<string> {
