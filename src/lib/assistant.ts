@@ -131,12 +131,13 @@ function vars(a: Analysis) {
 
 function guideReply(a: Analysis, message: string, history: ChatMessage[], chunks: Chunk[]): string {
   const lastAssistant = [...history].reverse().find((m) => m.role === "assistant")?.content ?? "";
-  const awaiting = PLAYBOOKS.find((p) => lastAssistant.includes(p.kickoffQuestion));
+  const lastLower = lastAssistant.toLowerCase();
+  const awaiting = PLAYBOOKS.find((p) => lastLower.includes(p.kickoffQuestion.toLowerCase()));
   if (awaiting) {
     const done = new Set(a.progress[awaiting.id]?.done ?? []);
     const next = awaiting.steps.find((s) => !done.has(s.id)) ?? awaiting.steps[0];
     const idx = awaiting.steps.indexOf(next) + 1;
-    return `Perfect, thanks — that helps. With ${clip(message, 40)}, here's where to start.\n\n**Step ${idx}: ${next.title}**\n${next.body}${next.details ? `\n${next.details.map((d) => `• ${d}`).join("\n")}` : ""}\n\nTell me when that's done (or if you get stuck) and we'll move to the next step. You can also tick it off in your ${awaiting.title} guide.`;
+    return `Perfect, thanks — that helps. Here's where to start.\n\n**Step ${idx}: ${next.title}**\n${next.body}${next.details ? `\n${next.details.map((d) => `• ${d}`).join("\n")}` : ""}\n\nTell me when that's done (or if you get stuck) and we'll move to the next step. You can also tick it off in your ${awaiting.title} guide.`;
   }
   const pb = detectPlaybook(message) ?? (chunks[0] ? getPlaybook(chunks[0].playbookId) : undefined);
   const wantsSetup = /\b(set ?up|start|install|begin|implement|how do i|how to|help me)\b/i.test(message);

@@ -60,3 +60,17 @@ describe("playbook library", () => {
     }
   });
 });
+
+describe("Ask Aivy guided setup", () => {
+  it("treats a reply to the kickoff question as an answer and gives step 1", async () => {
+    const { respond } = await import("@/lib/assistant");
+    const a = { profile: { name: "Café", industryLabel: "Hospitality", summary: "", facts: [] }, opportunities: [], progress: {} } as never;
+    const first = await respond(a, "How do I set up the booking assistant?", []);
+    expect(first.reply).toMatch(/which booking system/i);
+    const second = await respond(a, "We use OpenTable", [
+      { role: "user", content: "How do I set up the booking assistant?" },
+      { role: "assistant", content: first.reply },
+    ]);
+    expect(second.reply).toMatch(/Step 1: Write down your booking rules/);
+  });
+});
